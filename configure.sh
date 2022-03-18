@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rm -rf auth/ .env
+chmod +x script/*.sh
 
 echo "MongoDB Replica Set Configuration Tool"
 echo "Generating a key ..."
