@@ -123,9 +123,9 @@ volumes:
 The docker-compose contains the Mongo Express viewer for mongodb. The service is available at `http://localhost:8081/`.
 
 ## **Test**
-You can test your replicaset adding database, collections and documents through the mongo-express or the script in the `test` folder: 
+You can test the replicaset adding databases, collections and documents through the mongo-express service or using the script in the `examples` folder: 
 ```bash
-    $ python3 test/insert_demo.py
+    $ python3 examples/mongo_insert.py
 ```
 #### **Insert Document in Mongo**
 
@@ -161,7 +161,3 @@ for doc in coll.find({}):
     pprint(doc)
     
 ```
-
-As output you will see the `_id` of the document inserted in the `dbrs` database:
-
-![python-output](docs/images/python-out.png)
