@@ -26,6 +26,11 @@ MONGO_INITDB_ROOT_PASSWORD=<root_password>
 MONGO_REPLICA_SET_NAME=<replicaset_name>
 MONGO_CL_ADMIN_USERNAME=<username_clusteradmin>
 MONGO_CL_ADMIN_PASSWORD=<password_clusteradmin>
+
+#### Mongo Express Configuration
+ME_CONFIG_BASICAUTH_USERNAME=<basic_auth_username>
+ME_CONFIG_BASICAUTH_PASSWORD=<basic_auth_password>
+
 ```
 
 ## **docker-compose.yml**
@@ -45,6 +50,9 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_REPLICA_SET_NAME=${MONGO_REPLICA_SET_NAME}
+      - MONGO_REPLICA_SET_ADDR1=${MONGO_REPLICA_SET_ADDR1}
+      - MONGO_REPLICA_SET_ADDR2=${MONGO_REPLICA_SET_ADDR2}
+      - MONGO_REPLICA_SET_ADDR3=${MONGO_REPLICA_SET_ADDR3}
       - MONGO_CL_ADMIN_USERNAME=${MONGO_CL_ADMIN_USERNAME}
       - MONGO_CL_ADMIN_PASSWORD=${MONGO_CL_ADMIN_PASSWORD}
     volumes:
@@ -102,6 +110,8 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
       - ME_CONFIG_MONGODB_SERVER=mongodb
     depends_on:
       - mongodb
@@ -149,14 +159,14 @@ myclient = pymongo.MongoClient(f"mongodb://{username}:{password}@localhost:27017
 db = myclient["dbrs"]
 coll = db["contributors"]
 
-## Document to store in the contributors collection
+## Document to store in the contributors collection
 document = {"name": "<name>", "email": "<email>"}
 
-## Mongo insert
+## Mongo insert
 result = coll.insert_one(document)
 print("[SAVED] Document _id: {0}".format(result.inserted_id))
 
-## Mongo query for retrieving every document in contributors
+## Mongo query for retrieving every document in contributors
 for doc in coll.find({}):
     pprint(doc)
     

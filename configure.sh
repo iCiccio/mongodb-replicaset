@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf auth/ .env
-chmod +x script/*.sh
+chmod +x scripts/*.sh
 
 echo "MongoDB Replica Set Configuration Tool"
 echo "Generating a key ..."
@@ -11,6 +11,13 @@ echo "Changing permission to ./auth/key"
 chmod 600 ./auth/key
 
 echo "==== MongoDB Config ===="
+read -p "Enter MongoDB Address 1 [localhost]:" mdb_addr1
+mdb_addr1=${mdb_addr1:-localhost}
+read -p "Enter MongoDB Address 2 [localhost]:" mdb_addr2
+mdb_addr2=${mdb_addr2:-localhost}
+read -p "Enter MongoDB Address 3 [localhost]:" mdb_addr3
+mdb_addr3=${mdb_addr3:-localhost}
+
 read -p "Enter mongo root username [root]: " r_name
 r_name=${r_name:-root}
 read -p "Enter mongo password for root account [toor]: " r_psw
@@ -29,6 +36,9 @@ echo "MONGO_INITDB_ROOT_PASSWORD=$r_psw" >> .env
 echo "MONGO_REPLICA_SET_NAME=$rs_name" >> .env
 echo "MONGO_CL_ADMIN_USERNAME=$cl_name" >> .env
 echo "MONGO_CL_ADMIN_PASSWORD=$cl_psw" >> .env
+echo "MONGO_REPLICA_SET_ADDR1=$mdb_addr1" >> .env
+echo "MONGO_REPLICA_SET_ADDR2=$mdb_addr2" >> .env
+echo "MONGO_REPLICA_SET_ADDR3=$mdb_addr3" >> .env
 echo "Creating .env file ..."
 
 docker-compose down -v
