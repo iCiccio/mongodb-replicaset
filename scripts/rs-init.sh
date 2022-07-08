@@ -22,6 +22,11 @@ var config = {
         }
     ]
 };
+
+print("====== DEBUG ======");
+printjson(config);
+print("===================");
+
 rs.initiate(config, { force: true });
 rs.status();
 EOF
