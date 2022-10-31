@@ -14,9 +14,9 @@ services:
       - MONGO_REPLICA_SET_NAME=${MONGO_REPLICA_SET_NAME}
       - MONGO_CL_ADMIN_USERNAME=${MONGO_CL_ADMIN_USERNAME}
       - MONGO_CL_ADMIN_PASSWORD=${MONGO_CL_ADMIN_PASSWORD}
-      # - MONGO_REPLICA_SET_ADDR1=${MONGO_REPLICA_SET_ADDR1}
-      # - MONGO_REPLICA_SET_ADDR2=${MONGO_REPLICA_SET_ADDR2}
-      # - MONGO_REPLICA_SET_ADDR3=${MONGO_REPLICA_SET_ADDR3}
+      - MONGO_REPLICA_SET_ADDR1=${MONGO_REPLICA_SET_ADDR1}
+      - MONGO_REPLICA_SET_ADDR2=${MONGO_REPLICA_SET_ADDR2}
+      - MONGO_REPLICA_SET_ADDR3=${MONGO_REPLICA_SET_ADDR3}
     volumes:
       - mongodb-rs-1:/data/db
       - ./auth/key:/auth/key
@@ -25,6 +25,11 @@ services:
     entrypoint: [ "/usr/bin/mongod",  "--keyFile", "/auth/key", "--bind_ip_all", "--replSet", "${MONGO_REPLICA_SET_NAME}", "--port", "27017"]
     networks:
       - mongo-plus-network
+    extra_hosts:
+      - "mongodb:${MONGO_REPLICA_SET_ADDR1}"
+      - "mongodb2:${MONGO_REPLICA_SET_ADDR2}"
+      - "mongodb3:${MONGO_REPLICA_SET_ADDR3}"
+
 
   mongodb2:
     image: mongo:latest
@@ -43,6 +48,10 @@ services:
       - mongo-plus-network
     depends_on:
       - mongodb
+    extra_hosts:
+      - "mongodb:${MONGO_REPLICA_SET_ADDR1}"
+      - "mongodb2:${MONGO_REPLICA_SET_ADDR2}"
+      - "mongodb3:${MONGO_REPLICA_SET_ADDR3}"
 
   mongodb3:
     image: mongo:latest
@@ -61,6 +70,10 @@ services:
       - mongo-plus-network
     depends_on:
       - mongodb2
+    extra_hosts:
+      - "mongodb:${MONGO_REPLICA_SET_ADDR1}"
+      - "mongodb2:${MONGO_REPLICA_SET_ADDR2}"
+      - "mongodb3:${MONGO_REPLICA_SET_ADDR3}"
 
   mongo-express:
     image: mongo-express
@@ -78,6 +91,10 @@ services:
       - mongodb3
     networks:
       - mongo-plus-network
+    extra_hosts:
+      - "mongodb:${MONGO_REPLICA_SET_ADDR1}"
+      - "mongodb2:${MONGO_REPLICA_SET_ADDR2}"
+      - "mongodb3:${MONGO_REPLICA_SET_ADDR3}"
 
 networks:
   mongo-plus-network:
